@@ -12,8 +12,8 @@ App::~App() {
 }
 
 bool App::OnInit() {
-	MainWindow* mainwindow = new MainWindow();
-	mainwindow->Show();
+	MainWindow* mainwindow = new MainWindow("Window");
+	mainwindow->Show(true);
 
 	return true;
 }
