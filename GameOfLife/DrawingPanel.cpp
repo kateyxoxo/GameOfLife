@@ -7,10 +7,15 @@ DrawingPanel::DrawingPanel(wxFrame* parent) :wxPanel(parent, wxID_ANY)
 	this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
 	gridSize = 15;
 	cellSize = 10;
+
 };
 DrawingPanel::~DrawingPanel()
 {
 
+}
+void DrawingPanel::setGridSize(int size)
+{
+	gridSize = size;
 }
 void DrawingPanel::OnPaint(wxPaintEvent& wxPE)
 {

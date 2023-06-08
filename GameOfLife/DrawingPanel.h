@@ -6,6 +6,7 @@ class DrawingPanel :
 public:
         DrawingPanel(wxFrame*);
         ~DrawingPanel();
+        void setGridSize(int size);
 private:
         void OnPaint(wxPaintEvent&);
         int gridSize;
