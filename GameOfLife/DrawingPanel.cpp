@@ -1,12 +1,21 @@
 #include "DrawingPanel.h"
 #include "wx/graphics.h"
 #include "wx/dcbuffer.h"
-DrawingPanel::DrawingPanel(wxFrame* parent) :wxPanel(parent, wxID_ANY)
+#include "MainWindow.h"
+
+wxBEGIN_EVENT_TABLE(DrawingPanel, wxPanel)
+EVT_PAINT(DrawingPanel::OnPaint)
+EVT_LEFT_UP(DrawingPanel::OnMouseUp)
+wxEND_EVENT_TABLE()
+
+DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& gameBoard):wxPanel(parent), gameBoard(gameBoard)
 {
+	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
 	this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 	this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
 	gridSize = 15;
 	cellSize = 10;
+	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
 
 };
 DrawingPanel::~DrawingPanel()
@@ -17,18 +26,32 @@ void DrawingPanel::setGridSize(int size)
 {
 	gridSize = size;
 }
+void DrawingPanel::OnMouseUp(wxMouseEvent& event)
+{
+	int x = event.GetX();
+	int y = event.GetY();
+
+	int cellWidth = GetSize().GetWidth() / gridSize;
+	int cellHeight = GetSize().GetHeight() / gridSize;
+
+	int row = y / cellHeight;
+	int col = x / cellWidth;
+
+	gameBoard[row][col] = !gameBoard[row][col];
+
+	Refresh();
+}
 void DrawingPanel::OnPaint(wxPaintEvent& wxPE)
 {
 	wxAutoBufferedPaintDC dc(this);
 	dc.Clear();
-	 wxGraphicsContext *context = wxGraphicsContext::Create(dc);
-	if (!context) 
-	{ 
-		return; 
+	wxGraphicsContext* context = wxGraphicsContext::Create(dc);
+	if (!context)
+	{
+		return;
 	}
 	context->SetPen(*wxBLACK_PEN);
 	context->SetBrush(*wxWHITE_BRUSH);
-	//context->DrawRectangle(100, 100, 100, 100);
 	int panelWidth, panelHeight;
 	GetSize(&panelWidth, &panelHeight);
 
@@ -47,4 +70,5 @@ void DrawingPanel::OnPaint(wxPaintEvent& wxPE)
 	}
 
 	delete context;
+
 }
