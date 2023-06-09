@@ -16,5 +16,6 @@ private:
     std::vector<std::vector<bool>>& gameBoard;
 
     wxDECLARE_EVENT_TABLE();
+
 };
 

@@ -62,6 +62,14 @@ void DrawingPanel::OnPaint(wxPaintEvent& wxPE)
 	{
 		for (int j = 0; j < gridSize; j++)
 		{
+			if (gameBoard[i][j])
+			{
+				dc.SetBrush(*wxLIGHT_GREY_BRUSH);
+			}
+			else
+			{
+				dc.SetBrush(*wxWHITE_BRUSH);
+			}
 			int x = i * cellWidth;
 			int y = j * cellHeight;
 
