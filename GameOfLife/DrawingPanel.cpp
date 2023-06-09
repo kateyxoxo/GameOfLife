@@ -26,22 +26,8 @@ void DrawingPanel::setGridSize(int size)
 {
 	gridSize = size;
 }
-void DrawingPanel::OnMouseUp(wxMouseEvent& event)
-{
-	int x = event.GetX();
-	int y = event.GetY();
 
-	int cellWidth = GetSize().GetWidth() / gridSize;
-	int cellHeight = GetSize().GetHeight() / gridSize;
-
-	int row = y / cellHeight;
-	int col = x / cellWidth;
-
-	gameBoard[row][col] = !gameBoard[row][col];
-
-	Refresh();
-}
-void DrawingPanel::OnPaint(wxPaintEvent& wxPE)
+void DrawingPanel::OnPaint(wxPaintEvent& event)
 {
 	wxAutoBufferedPaintDC dc(this);
 	dc.Clear();
@@ -60,6 +46,7 @@ void DrawingPanel::OnPaint(wxPaintEvent& wxPE)
 
 	for (int i = 0; i < gridSize; i++)
 	{
+
 		for (int j = 0; j < gridSize; j++)
 		{
 			if (gameBoard[i][j])
@@ -70,13 +57,30 @@ void DrawingPanel::OnPaint(wxPaintEvent& wxPE)
 			{
 				dc.SetBrush(*wxWHITE_BRUSH);
 			}
+
 			int x = i * cellWidth;
 			int y = j * cellHeight;
 
-			context->DrawRectangle(x, y, cellWidth, cellHeight);
+			dc.DrawRectangle(x, y, cellWidth, cellHeight);
+			
 		}
 	}
 
 	delete context;
 
+}
+void DrawingPanel::OnMouseUp(wxMouseEvent& event)
+{
+	int x = event.GetX();
+	int y = event.GetY();
+
+	int cellWidth = GetSize().GetWidth() / gridSize;
+	int cellHeight = GetSize().GetHeight() / gridSize;
+
+	int col = y / cellHeight;
+	int row = x / cellWidth;
+
+	gameBoard[row][col] = !gameBoard[row][col];
+
+	Refresh();
 }
