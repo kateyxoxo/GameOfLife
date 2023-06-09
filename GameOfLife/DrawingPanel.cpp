@@ -6,6 +6,7 @@
 wxBEGIN_EVENT_TABLE(DrawingPanel, wxPanel)
 EVT_PAINT(DrawingPanel::OnPaint)
 EVT_LEFT_UP(DrawingPanel::OnMouseUp)
+EVT_SIZE(MainWindow::OnSizeChange)
 wxEND_EVENT_TABLE()
 
 DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& gameBoard):wxPanel(parent), gameBoard(gameBoard)
