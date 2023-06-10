@@ -87,7 +87,7 @@ void MainWindow::OnPause(wxCommandEvent& event)
 
 void MainWindow::OnNext(wxCommandEvent& event)
 {
-    CalculateNextGeneration();
+    NextGeneration();
 }
 
 void MainWindow::OnClear(wxCommandEvent& event)
@@ -97,12 +97,55 @@ void MainWindow::OnClear(wxCommandEvent& event)
 
 void MainWindow::OnTimer(wxTimerEvent& event)
 {
-    NextGeneration();
+    CalculateNextGeneration();
 }
 
 void MainWindow::NextGeneration()
 {
-    CalculateNextGeneration();
+    std::vector<std::vector<bool>> sandbox = gameBoard; // Create a sandbox to store the next generation
+
+    int newLivingCellCount = 0; // Initialize the count for the next generation
+
+    for (int row = 0; row < gridSize; ++row)
+    {
+        for (int col = 0; col < gridSize; ++col)
+        {
+            int livingNeighbors = CountLivingNeighbors(row, col);
+            bool isAlive = gameBoard[row][col];
+
+            if (isAlive)
+            {
+                // Living cell rules
+                if (livingNeighbors < 2 || livingNeighbors > 3)
+                {
+                    sandbox[row][col] = false; // Cell dies in the next generation
+                }
+                else
+                {
+                    sandbox[row][col] = true; // Cell lives in the next generation
+                    newLivingCellCount++; // Increment the count for each living cell
+                }
+            }
+            else
+            {
+                // Dead cell rules
+                if (livingNeighbors == 3)
+                {
+                    sandbox[row][col] = true; // Cell becomes alive in the next generation
+                    newLivingCellCount++; // Increment the count for each newly alive cell
+                }
+            }
+        }
+    }
+
+    gameBoard.swap(sandbox); // Move the data from the sandbox to the game board
+    generationCount++; // Increment the generation count
+    livingCellCount = newLivingCellCount; // Update the living cell count
+
+    UpdateStatusBar(); // Update the status bar text
+    drawingPanel->SetGameBoard(gameBoard); // Update the game board in the drawing panel
+    drawingPanel->Refresh(); // Refresh the drawing panel
+    UpdateLivingCellCount(); // Update the living cell count (optional, if needed elsewhere)
 }
 
 int MainWindow::CountLivingCells()

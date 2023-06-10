@@ -9,12 +9,12 @@ wxEND_EVENT_TABLE()
 
 DrawingPanel::DrawingPanel(wxWindow* parent) : wxPanel(parent), gridSize(15)
 {
-    this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
-    this->SetBackgroundStyle(wxBG_STYLE_PAINT);
-    this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
-    gridSize = 15;
-    cellSize = 10;
-    this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
+	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
+	this->SetBackgroundStyle(wxBG_STYLE_PAINT);
+	this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
+	gridSize = 15;
+	cellSize = 10;
+	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
 }
 
 DrawingPanel::~DrawingPanel()
@@ -67,33 +67,33 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
 
 void DrawingPanel::SetGridSize(int size)
 {
-    gridSize = size;
-    Refresh();
+	gridSize = size;
+	Refresh();
 }
 
 void DrawingPanel::SetGameBoard(const std::vector<std::vector<bool>>& board)
 {
-    gameBoard = board;
-    Refresh();
+	gameBoard = board;
+	Refresh();
 }
 
 void DrawingPanel::OnMouseUp(wxMouseEvent& event)
 {
-    int mouseX = event.GetX();
-    int mouseY = event.GetY();
+	int mouseX = event.GetX();
+	int mouseY = event.GetY();
 
-    int panelWidth, panelHeight;
-    GetClientSize(&panelWidth, &panelHeight);
+	int panelWidth, panelHeight;
+	GetClientSize(&panelWidth, &panelHeight);
 
-    int cellWidth = panelWidth / gridSize;
-    int cellHeight = panelHeight / gridSize;
+	int cellWidth = panelWidth / gridSize;
+	int cellHeight = panelHeight / gridSize;
 
-    int row = mouseY / cellHeight;
-    int col = mouseX / cellWidth;
+	int row = mouseY / cellHeight;
+	int col = mouseX / cellWidth;
 
-    if (row >= 0 && row < gridSize && col >= 0 && col < gridSize)
-    {
-        gameBoard[row][col] = !gameBoard[row][col];
-        Refresh();
-    }
+	if (row >= 0 && row < gridSize && col >= 0 && col < gridSize)
+	{
+		gameBoard[row][col] = !gameBoard[row][col];
+		Refresh();
+	}
 }

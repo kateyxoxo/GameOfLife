@@ -15,7 +15,7 @@ public:
 
 private:
     wxGraphicsContext* context;
-    int gridSize; 
+    int gridSize;
     int cellSize;
     std::vector<std::vector<bool>> gameBoard;
 
