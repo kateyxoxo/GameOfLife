@@ -12,8 +12,8 @@ App::~App() {
 }
 
 bool App::OnInit() {
-	MainWindow* mainwindow = new MainWindow("Window");
-	mainwindow->Show(true);
+	mainWindow = new MainWindow("Game of Life", wxDefaultPosition, wxSize(800,800));
+	mainWindow->Show();
 
 	return true;
 }

@@ -1,31 +1,24 @@
 #include "DrawingPanel.h"
 #include "wx/graphics.h"
 #include "wx/dcbuffer.h"
-#include "MainWindow.h"
 
 wxBEGIN_EVENT_TABLE(DrawingPanel, wxPanel)
 EVT_PAINT(DrawingPanel::OnPaint)
 EVT_LEFT_UP(DrawingPanel::OnMouseUp)
-EVT_SIZE(MainWindow::OnSizeChange)
 wxEND_EVENT_TABLE()
 
-DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& gameBoard):wxPanel(parent), gameBoard(gameBoard)
+DrawingPanel::DrawingPanel(wxWindow* parent) : wxPanel(parent), gridSize(15)
 {
-	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
-	this->SetBackgroundStyle(wxBG_STYLE_PAINT);
-	this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
-	gridSize = 15;
-	cellSize = 10;
-	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
+    this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
+    this->SetBackgroundStyle(wxBG_STYLE_PAINT);
+    this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
+    gridSize = 15;
+    cellSize = 10;
+    this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
+}
 
-};
 DrawingPanel::~DrawingPanel()
 {
-
-}
-void DrawingPanel::setGridSize(int size)
-{
-	gridSize = size;
 }
 
 void DrawingPanel::OnPaint(wxPaintEvent& event)
@@ -59,29 +52,48 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
 				dc.SetBrush(*wxWHITE_BRUSH);
 			}
 
-			int x = i * cellWidth;
-			int y = j * cellHeight;
+			int x = j * cellWidth;
+			int y = i * cellHeight;
 
 			dc.DrawRectangle(x, y, cellWidth, cellHeight);
-			
+
 		}
 	}
 
 	delete context;
-
 }
+
+
+
+void DrawingPanel::SetGridSize(int size)
+{
+    gridSize = size;
+    Refresh();
+}
+
+void DrawingPanel::SetGameBoard(const std::vector<std::vector<bool>>& board)
+{
+    gameBoard = board;
+    Refresh();
+}
+
 void DrawingPanel::OnMouseUp(wxMouseEvent& event)
 {
-	int x = event.GetX();
-	int y = event.GetY();
+    int mouseX = event.GetX();
+    int mouseY = event.GetY();
 
-	int cellWidth = GetSize().GetWidth() / gridSize;
-	int cellHeight = GetSize().GetHeight() / gridSize;
+    int panelWidth, panelHeight;
+    GetClientSize(&panelWidth, &panelHeight);
 
-	int col = y / cellHeight;
-	int row = x / cellWidth;
+    int cellWidth = panelWidth / gridSize;
+    int cellHeight = panelHeight / gridSize;
 
-	gameBoard[row][col] = !gameBoard[row][col];
+    int row = mouseY / cellHeight;
+    int col = mouseX / cellWidth;
 
-	Refresh();
+    if (row >= 0 && row < gridSize && col >= 0 && col < gridSize)
+    {
+        gameBoard[row][col] = !gameBoard[row][col];
+        Refresh();
+    }
 }

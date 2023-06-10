@@ -1,21 +1,23 @@
 #pragma once
+
 #include "wx/wx.h"
-class DrawingPanel :
-    public wxPanel
+#include <vector>
+
+class DrawingPanel : public wxPanel
 {
 public:
-    DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& gameBoard);
+    DrawingPanel(wxWindow* parent);
     ~DrawingPanel();
-    void setGridSize(int size);
+    void OnMouseUp(wxMouseEvent& event);
+    void OnPaint(wxPaintEvent& event);
+    void SetGridSize(int size);
+    void SetGameBoard(const std::vector<std::vector<bool>>& board);
 
 private:
-    void OnMouseUp(wxMouseEvent& event);
-    void OnPaint(wxPaintEvent&);
-    int gridSize;
+    wxGraphicsContext* context;
+    int gridSize; 
     int cellSize;
-    std::vector<std::vector<bool>>& gameBoard;
+    std::vector<std::vector<bool>> gameBoard;
 
     wxDECLARE_EVENT_TABLE();
-
 };
-
